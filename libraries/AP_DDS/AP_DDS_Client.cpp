@@ -649,11 +649,16 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
         geofence_data.is_enabled = AP::fence()->enabled();
         geofence_data.max_height = AP::fence()->get_safe_alt_max();
         geofence_data.min_height = AP::fence()->get_safe_alt_min();
+
+        AC_PolyFence_loader poly_fence = AP::fence()->polyfence();
+
         for(int i = 0; i<20; i++)
         {
-            geofence_data.poly_fence[i].x = i;
+            AC_PolyFenceItem item;
+            poly_fence.get_item(i, item);
+            geofence_data.poly_fence[i].x = item.radius;
 
-            geofence_data.poly_fence[i].y = -1*i*i;
+            geofence_data.poly_fence[i].y = item.vertex_count;
         }
         const uxrObjectId replier_id = {
             .id = services[to_underlying(ServiceIndex::GEOFENCE_REQUEST)].rep_id,
