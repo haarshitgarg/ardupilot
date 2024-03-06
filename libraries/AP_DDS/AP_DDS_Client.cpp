@@ -644,23 +644,32 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
             break;
         }
         
+        // Getting the geo fence data
         geofence_data.radius = AP::fence()->get_radius();
         geofence_data.fence_type = AP::fence()->get_enabled_fences();
         geofence_data.is_enabled = AP::fence()->enabled();
         geofence_data.max_height = AP::fence()->get_safe_alt_max();
         geofence_data.min_height = AP::fence()->get_safe_alt_min();
         
-        uint no_of_vertex = AP::fence()->polyfence()->num_stored_items();
+        // Getting the polyfence data based on no of vertex
+        int no_of_vertex = AP::fence()->polyfence().num_stored_items();
         for(int i = 0; i<no_of_vertex; i++)
         {
             AC_PolyFenceItem item;
-            if(AP::fence()->polyfence()->get_item(i, item))
+            if(AP::fence()->polyfence().get_item(i, item))
             {
-                geofence_data.poly_fence[i].x = item.radius;
-                geofence_data.poly_fence[i].y = item.no_of_vertex;
+                geofence_data.poly_fence[i].x = item.loc.x;
+                geofence_data.poly_fence[i].y = item.loc.y;
             }
         }
 
+        //Setting the other vertices to zero for polyfence_msgs
+        for(int i = no_of_vertex; i<20; i++)
+        {
+                geofence_data.poly_fence[i].x = 0;
+                geofence_data.poly_fence[i].y = 0;
+        }
+ 
         const uxrObjectId replier_id = {
             .id = services[to_underlying(ServiceIndex::GEOFENCE_REQUEST)].rep_id,
             .type = UXR_REPLIER_ID
