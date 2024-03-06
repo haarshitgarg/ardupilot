@@ -651,7 +651,7 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
         geofence_data.min_height = AP::fence()->get_safe_alt_min();
 
         AC_PolyFence_loader poly_fence = AP::fence()->polyfence();
-
+        poly_fence.init();
         for(int i = 0; i<20; i++)
         {
             AC_PolyFenceItem item;
