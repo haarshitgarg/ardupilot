@@ -1,8 +1,0 @@
-module geometry_msgs {
-  module msg {
-    struct PolyFenceItem {
-      float32 x;
-      float32 y;
-    };
-  };
-};
