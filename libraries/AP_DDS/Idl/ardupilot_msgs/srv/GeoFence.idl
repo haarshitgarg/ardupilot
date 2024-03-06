@@ -1,14 +1,16 @@
 // generated from rosidl_adapter/resource/srv.idl.em
 // with input from ardupilot_msgs/srv/ArmMotors.srv
 // generated code does not contain a copyright notice
-#import ardupilot_msgs/msg/PolyFenceItem.idl
-
 module ardupilot_msgs {
   module srv {
     struct GeoFence_Request {
       boolean req;
     };
-
+    struct PolyFenceItem {
+      float32 x;
+      float32 y;
+    };
+ 
     struct GeoFence_Response {
       uint8 fence_type;
       uint8 is_enabled;
