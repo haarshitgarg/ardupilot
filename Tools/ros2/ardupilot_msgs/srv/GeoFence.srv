@@ -1,13 +1,13 @@
 
-# This service requests the vehicle to arm or disarm its motors.
+# This service gets the fence details
 
-# Set true to arm motors, false to disarm motors.
-bool req
+# 
+
 ---
-# True if arming/disarming request for motors was successful , false otherwise. 
+# Details of the fence 
 uint8 fence_type
 uint8 is_enabled
-uint8 radius
 float32 min_height
 float32 max_height
-PolyFenceItem[20] x
+PolyFenceItem[3] polygon_fence
+CircleFence[3] circle_fence

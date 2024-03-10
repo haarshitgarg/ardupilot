@@ -7,17 +7,25 @@ module ardupilot_msgs {
       boolean req;
     };
     struct PolyFenceItem {
+      int type;
+      float x[10];
+      float y[10];
+    };
+
+    struct CircleFence {
+      int type;
+      int radius;
       float x;
       float y;
-    };
+    }
  
     struct GeoFence_Response {
       uint8 fence_type;
       uint8 is_enabled;
-      uint8 radius;
       float min_height;
       float max_height;
-      PolyFenceItem poly_fence[20];
+      PolyFenceItem poly_fence[3];
+      CircleFence circle_fence[3];
     };
   };
 };

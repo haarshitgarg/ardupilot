@@ -645,9 +645,54 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
         }
         
         // Getting the geo fence data
-        geofence_data.min_height = AP::fence()->get_safe_alt_min();
-        geofence_data.max_height = AP::fence()->get_safe_alt_max();
-        
+        uint8 fence_type = AP::fence()->get_enabled_fences();
+        geofence_data.fence_type = fence_type;
+
+        // Max height bit is set
+        if(fence_type & (1<<0))
+        {
+            // Get the maximum height
+            geofence_data.max_height = AP::fence()->get_safe_alt_max();
+        }
+
+        // Cylindrical ("Tin Can") bit is set
+        // - centered for home
+        // - parameters for radius and height
+        if(fence_type & (1<<1))
+        {
+            // Get the radius
+            geofence_data.radius = AP::fence()->get_radius();
+        }
+
+        // Inclusion/Exclusion zones are set
+        if(fence_type & (1<<2))
+        {
+            // TODO
+            uint8_t num_exclusion_polygons = AP::fence()->polyfence().get_exclusion_polygon_count();
+            for(uint16_t i = 0; i<num_exclusion_polygons; i++)
+            {
+                uint16_t num_vertex;
+                Vector2f* vec = get_exclusion_polygon(i, &num_vertex);
+                for(uint16_t j = 0; j<num_vertex; j++)
+                {
+                    geofence_data.polygon_fence[i].x[j] = vec[j].x;
+                    geofence_data.polygon_fence[i].y[j] = vec[j].y;
+                }
+
+            }
+
+            uint8_t num_inclusion_zones = AP::fence()->polyfence().get_inclusion_polygon_count();
+            for(int i = 0; i<num_inclusion_zones; i++)
+            {
+
+            }
+        }
+
+        // Global Minimum altitude is set
+        if(fence_type & (1<<3))
+        {
+            geofence_data.min_height = AP::fence()->get_safe_alt_min();
+        }
         // Getting the polyfence data based on no of vertex
         int no_of_vertex = AP::fence()->polyfence().num_stored_items();
         for(int i = 0; i<no_of_vertex; i++)

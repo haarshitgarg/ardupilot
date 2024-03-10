@@ -15,6 +15,7 @@ find_package(rosidl_default_generators REQUIRED)
 rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/GlobalPosition.msg"
   "msg/PolyFenceItem.msg"
+  "msg/CircleFence.msg"
   "srv/ArmMotors.srv"
   "srv/ModeSwitch.srv"
   "srv/GeoFence.srv"
