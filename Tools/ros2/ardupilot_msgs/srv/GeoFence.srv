@@ -7,6 +7,7 @@
 # Details of the fence 
 uint8 fence_type
 uint8 is_enabled
+int32 radius
 float32 min_height
 float32 max_height
 PolyFenceItem[3] polygon_fence

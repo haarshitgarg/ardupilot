@@ -4,7 +4,6 @@
 module ardupilot_msgs {
   module srv {
     struct GeoFence_Request {
-      boolean req;
     };
     struct PolyFenceItem {
       int32 type;
@@ -22,6 +21,7 @@ module ardupilot_msgs {
     struct GeoFence_Response {
       uint8 fence_type;
       uint8 is_enabled;
+      int32 radius;
       float min_height;
       float max_height;
       PolyFenceItem poly_fence[3];
