@@ -645,7 +645,7 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
         }
         
         // Getting the geo fence data
-        uint8 fence_type = AP::fence()->get_enabled_fences();
+        uint8_t fence_type = AP::fence()->get_enabled_fences();
         geofence_data.fence_type = fence_type;
 
         // Max height bit is set
