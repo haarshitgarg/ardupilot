@@ -7,14 +7,14 @@ module ardupilot_msgs {
       boolean req;
     };
     struct PolyFenceItem {
-      int type;
+      int32 type;
       float x[10];
       float y[10];
     };
 
     struct CircleFence {
-      int type;
-      int radius;
+      int32 type;
+      int32 radius;
       float x;
       float y;
     }
