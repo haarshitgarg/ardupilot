@@ -688,48 +688,55 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
             }
         }
 
-        // Global Minimum altitude is set
+        // Max height bit is set
         if(fence_type & (1<<3))
         {
+            // Get the maximum height
             geofence_data.min_height = AP::fence()->get_safe_alt_min();
         }
-        // Getting the polyfence data based on no of vertex
-        int no_of_vertex = AP::fence()->polyfence().num_stored_items();
-        for(int i = 0; i<no_of_vertex; i++)
-        {
-            AC_PolyFenceItem item;
-            if(AP::fence()->polyfence().get_item(i, item))
-            {
+
+        // // Global Minimum altitude is set
+        // if(fence_type & (1<<3))
+        // {
+        //     geofence_data.min_height = AP::fence()->get_safe_alt_min();
+        // }
+        // // Getting the polyfence data based on no of vertex
+        // int no_of_vertex = AP::fence()->polyfence().num_stored_items();
+        // for(int i = 0; i<no_of_vertex; i++)
+        // {
+        //     AC_PolyFenceItem item;
+        //     if(AP::fence()->polyfence().get_item(i, item))
+        //     {
                 
-                AC_PolyFenceType type;
-                if(i==0)
-                {
+        //         AC_PolyFenceType type;
+        //         if(i==0)
+        //         {
 
-                    type = item.type;
-                    geofence_data.fence_type = (uint8_t)item.type;
-                }
+        //             type = item.type;
+        //             geofence_data.fence_type = (uint8_t)item.type;
+        //         }
 
-                switch(type)
-                {
-                    case AC_PolyFenceType::POLYGON_INCLUSION :
-                        geofence_data.poly_fence[i].x = item.loc.x;
-                        geofence_data.poly_fence[i].y = item.loc.y;
+        //         switch(type)
+        //         {
+        //             case AC_PolyFenceType::POLYGON_INCLUSION :
+        //                 geofence_data.poly_fence[i].x = item.loc.x;
+        //                 geofence_data.poly_fence[i].y = item.loc.y;
                     
-                    case AC_PolyFenceType::CIRCLE_INCLUSION :
-                        geofence_data.poly_fence[i].x = item.loc.x;
-                        geofence_data.poly_fence[i].y = item.loc.y;
-                        geofence_data.radius = item.radius;
-                    default:
-                }
-            }
-        }
+        //             case AC_PolyFenceType::CIRCLE_INCLUSION :
+        //                 geofence_data.poly_fence[i].x = item.loc.x;
+        //                 geofence_data.poly_fence[i].y = item.loc.y;
+        //                 geofence_data.radius = item.radius;
+        //             default:
+        //         }
+        //     }
+        // }
 
-        //Setting the other vertices to zero for polyfence_msgs
-        for(int i = no_of_vertex; i<20; i++)
-        {
-                geofence_data.poly_fence[i].x = 0;
-                geofence_data.poly_fence[i].y = 0;
-        }
+        // //Setting the other vertices to zero for polyfence_msgs
+        // for(int i = no_of_vertex; i<20; i++)
+        // {
+        //         geofence_data.poly_fence[i].x = 0;
+        //         geofence_data.poly_fence[i].y = 0;
+        // }
  
         const uxrObjectId replier_id = {
             .id = services[to_underlying(ServiceIndex::GEOFENCE_REQUEST)].rep_id,
