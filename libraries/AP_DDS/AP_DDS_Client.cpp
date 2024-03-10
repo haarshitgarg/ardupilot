@@ -672,20 +672,63 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
             for(uint16_t i = 0; i<num_exclusion_polygons; i++)
             {
                 uint16_t num_vertex;
-                Vector2f* vec = get_exclusion_polygon(i, &num_vertex);
+                Vector2f* vec = AP::fence()->polyfence().get_exclusion_polygon(i, num_vertex);
+                geofence_data.poly_fence[i].type = 97;
                 for(uint16_t j = 0; j<num_vertex; j++)
                 {
-                    geofence_data.polygon_fence[i].x[j] = vec[j].x;
-                    geofence_data.polygon_fence[i].y[j] = vec[j].y;
+                    geofence_data.poly_fence[i].x[j] = vec[j].x;
+                    geofence_data.poly_fence[i].y[j] = vec[j].y;
                 }
 
             }
 
-            uint8_t num_inclusion_zones = AP::fence()->polyfence().get_inclusion_polygon_count();
-            for(int i = 0; i<num_inclusion_zones; i++)
+            uint8_t num_inclusion_polygons = AP::fence()->polyfence().get_inclusion_polygon_count();
+            for(int i = num_exclusion_polygons; i<num_inclusion_polygons + no_of_exclusion_polygons; i++)
             {
+                uint16_t num_vertex;
+                Vector2f* vec = AP::fence()->polyfence().get_inclusion_polygon(i, num_vertex);
+                geofence_data.poly_fence[i].type = 98;
+                for(uint16_t j = 0; j<num_vertex; j++)
+                {
+                    geofence_data.poly_fence[i].x[j] = vec[j].x;
+                    geofence_data.poly_fence[i].y[j] = vec[j].y;
+                }
 
             }
+
+            uint8_t num_exclusion_circles = AP::fence()->polyfence().get_exclusion_circle_count();
+            for(int i = 0; i<num_exclusion_circles; i++)
+            {
+                Vector2f pos;
+                float radius;
+
+                if(!AP::fence()->polyfence().get_exclusion_circle(i, pos, radius))
+                {
+                    break;
+                }
+                geofence_data.circle_fence[i].x = pos.x;
+                geofence_data.circle_fence[i].y = pos.y;
+                geofence_data.circle_fence[i].radius = radius;
+                geofence_data.circle_fence[i].type = 93; // Circle Exclusion type in ac polyfence. Can be kept as string
+            }
+
+            uint8_t num_inclusion_circles = AP::fence()->polyfence().get_inclusion_circle_count();
+            for(int i = num_exclusion_circles; i<num_exclusion_circles + num_inclusion_circles; i++)
+            {
+                Vector2f pos;
+                float radius;
+
+                if(!AP::fence()->polyfence().get_inclusion_circle(i, pos, radius))
+                {
+                    break;
+                }
+                geofence_data.circle_fence[i].x = pos.x;
+                geofence_data.circle_fence[i].y = pos.y;
+                geofence_data.circle_fence[i].radius = radius;
+                geofence_data.circle_fence[i].type = 92; // Circle inclusion type in ac polyfence. Can be kept as string
+            }
+
+            
         }
 
         // Max height bit is set
