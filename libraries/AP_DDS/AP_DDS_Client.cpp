@@ -655,10 +655,12 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
             AC_PolyFenceItem item;
             if(AP::fence()->polyfence().get_item(i, item))
             {
+                
+                AC_PolyFenceType type;
                 if(i==0)
                 {
 
-                    AC_PolyFenceType type = item.type;
+                    type = item.type;
                     geofence_data.fence_type = (uint8_t)item.type;
                 }
 
@@ -674,7 +676,6 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
                         geofence_data.radius = item.radius;
                     default:
                 }
->>>>>>> 7b3cc954ff (Adding a geofence message and interface)
             }
         }
 
