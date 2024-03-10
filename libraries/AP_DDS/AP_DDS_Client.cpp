@@ -647,6 +647,7 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
         // Getting the geo fence data
         uint8_t fence_type = AP::fence()->get_enabled_fences();
         geofence_data.fence_type = fence_type;
+        geofence_data.p.push_back(0);
 
         // Max height bit is set
         if(fence_type & (1<<0))
@@ -683,7 +684,7 @@ void AP_DDS_Client::on_request(uxrSession* uxr_session, uxrObjectId object_id, u
             }
 
             uint8_t num_inclusion_polygons = AP::fence()->polyfence().get_inclusion_polygon_count();
-            for(int i = num_exclusion_polygons; i<num_inclusion_polygons + no_of_exclusion_polygons; i++)
+            for(int i = num_exclusion_polygons; i<num_inclusion_polygons + num_exclusion_polygons; i++)
             {
                 uint16_t num_vertex;
                 Vector2f* vec = AP::fence()->polyfence().get_inclusion_polygon(i, num_vertex);

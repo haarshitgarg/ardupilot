@@ -26,6 +26,7 @@ module ardupilot_msgs {
       float max_height;
       PolyFenceItem poly_fence[3];
       CircleFence circle_fence[3];
+      sequence<int32> p;
     };
   };
 };

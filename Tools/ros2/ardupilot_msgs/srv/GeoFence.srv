@@ -12,3 +12,4 @@ float32 min_height
 float32 max_height
 PolyFenceItem[3] polygon_fence
 CircleFence[3] circle_fence
+unbounded dynamic array<int32> p
