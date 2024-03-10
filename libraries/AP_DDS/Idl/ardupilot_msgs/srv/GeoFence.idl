@@ -17,7 +17,7 @@ module ardupilot_msgs {
       int32 radius;
       float x;
       float y;
-    }
+    };
  
     struct GeoFence_Response {
       uint8 fence_type;
